@@ -11,6 +11,40 @@
       <arg column="h_name" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
+  <resultMap id="BuildMap" type="com.demo.model.Comunity" >
+    <constructor >
+      <arg column="province" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="dist" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="b_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <resultMap id="UnitMap" type="com.demo.model.Comunity" >
+    <constructor >
+      <arg column="province" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="dist" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="b_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="u_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <resultMap id="HostMap" type="com.demo.model.Comunity" >
+    <constructor >
+      <arg column="province" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="dist" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="c_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="b_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="u_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="h_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="h_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
 
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,24 +107,124 @@
   <sql id="Base_Column_List" >
     c_id, c_name, b_name, u_name, h_id, h_name
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.demo.model.ComunityExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from comunity_info
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
+  <select id="selectById" resultMap="BuildMap" parameterType="java.lang.String" >
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id and A.c_id =#{cId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByExample" parameterType="com.demo.model.ComunityExample" >
+  <select id="selectByIdList" resultMap="BuildMap">
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id and A.c_id IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+  <select id="selectUnit" resultMap="UnitMap" parameterType="com.demo.model.Comunity" >
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name,B.u_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id
+    <if test="record.cId != null" >
+    AND B.c_id=#{record.cId,jdbcType=VARCHAR}
+    </if>
+    <if test="record.bName != null" >
+      AND B.b_name = #{record.bName,jdbcType=VARCHAR}
+    </if>
+    and B.u_name is not null
+  </select>
+  <select id="selectUnitByIdList" resultMap="UnitMap">
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name,B.u_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id and A.c_id IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and B.u_name is not null
+  </select>
+  <select id="selectHost" resultMap="HostMap" parameterType="com.demo.model.Comunity" >
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name,B.u_name,B.h_id,B.h_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id
+    <if test="record.cId != null" >
+      AND B.c_id=#{record.cId,jdbcType=VARCHAR}
+    </if>
+    <if test="record.bName != null" >
+      AND B.b_name = #{record.bName,jdbcType=VARCHAR}
+    </if>
+    <if test="record.uName != null" >
+      AND B.u_name = #{record.uName,jdbcType=VARCHAR}
+    </if>
+    and B.h_name is not null
+  </select>
+  <select id="selectHostByIdList" resultMap="HostMap">
+    select DISTINCT
+    A.province,A.city,A.dist,A.c_name,B.c_id,B.b_name,B.u_name,B.h_id,B.h_name
+    from local_info as a INNER JOIN comunity_info AS B
+    where A.c_id=B.c_id and A.c_id IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and B.h_name is not null
+  </select>
+
+  <select id="getbuilds" resultType="String" parameterType="java.lang.String">
+    select distinct b_name
+    from comunity_info
+    where c_id=#{cId,jdbcType=VARCHAR} and b_name is not null
+  </select>
+  <select id="getunits" resultType="String" parameterType="java.lang.String">
+    select distinct u_name
+    from comunity_info
+    where c_id=#{cId,jdbcType=VARCHAR} and b_name=#{bName,jdbcType=VARCHAR}
+    and u_name is not null
+  </select>
+  <select id="gethost" resultType="String" parameterType="java.lang.String">
+    select distinct h_name
+    from comunity_info
+    where c_id=#{cId,jdbcType=VARCHAR} and b_name=#{bName,jdbcType=VARCHAR} and u_name=#{uName,jdbcType=VARCHAR} and h_name is not null
+  </select>
+  <select id="alreadyexit" resultMap="BaseResultMap" parameterType="com.demo.model.Comunity" >
+    select
+    <include refid="Base_Column_List" />
+    FROM comunity_info
+    where 1=1
+    <if test="record.cId != null" >
+      AND c_id=#{record.cId,jdbcType=VARCHAR}
+    </if>
+    <if test="record.bName != null" >
+      AND b_name = #{record.bName,jdbcType=VARCHAR}
+    </if>
+    <if test="record.uName != null" >
+      AND u_name = #{record.uName,jdbcType=VARCHAR}
+    </if>
+    <if test="record.hId != null" >
+      AND h_id = #{record.hId,jdbcType=INTEGER}
+    </if>
+    <if test="record.hName != null" >
+      AND h_name = #{record.hName,jdbcType=VARCHAR}
+    </if>
+
+
+
+  </select>
+
+
+  <delete id="delete" parameterType="com.demo.model.Comunity" >
     delete from comunity_info
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+    where 1=1
+    <if test="record.cId != null" >
+      AND c_id=#{record.cId,jdbcType=VARCHAR}
+    </if>
+    <if test="record.bName != null" >
+      AND b_name = #{record.bName,jdbcType=VARCHAR}
+    </if>
+    <if test="record.uName != null" >
+      AND u_name = #{record.uName,jdbcType=VARCHAR}
     </if>
   </delete>
   <insert id="insert" parameterType="com.demo.model.Comunity" >
@@ -142,48 +276,104 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.demo.model.ComunityExample" resultType="java.lang.Integer" >
-    select count(*) from comunity_info
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+  <insert id="importExcel" parameterType="java.util.List">
+    insert into local_info
+    <foreach collection="list" item="item" index= "index" separator =",">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+
+    <if test="item.cId != null" >
+      c_id,
     </if>
+    <if test="item.cName != null" >
+      c_name,
+    </if>
+    <if test="item.bName != null" >
+      b_name,
+    </if>
+    <if test="item.uName != null" >
+      u_name,
+    </if>
+    <if test="item.hId != null" >
+      h_id,
+    </if>
+    <if test="item.hName != null" >
+      h_name,
+    </if>
+  </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="item.cId != null" >
+          #{item.cId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.cName != null" >
+          #{item.cName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bName != null" >
+          #{item.bName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.uName != null" >
+          #{item.uName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.hId != null" >
+          #{item.hId,jdbcType=INTEGER},
+        </if>
+        <if test="item.hName != null" >
+          #{item.hName,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+
+  </insert>
+  <select id="countByExample" parameterType="com.demo.model.Comunity" resultType="java.lang.Integer" >
+    select count(*) from comunity_info
+    where 1=1
+    <if test="record.cId != null" >
+      AND c_id=#{record.cId,jdbcType=VARCHAR}
+    </if>
+    <if test="record.bName != null" >
+      AND b_name = #{record.bName,jdbcType=VARCHAR}
+    </if>
+    <if test="record.uName != null" >
+      AND u_name = #{record.uName,jdbcType=VARCHAR}
+    </if>
+
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="update" parameterType="map" >
     update comunity_info
     <set >
-      <if test="record.cId != null" >
-        c_id = #{record.cId,jdbcType=VARCHAR},
+      <if test="newrecord.cId != null" >
+        c_id = #{newrecord.cId,jdbcType=VARCHAR},
       </if>
-      <if test="record.cName != null" >
-        c_name = #{record.cName,jdbcType=VARCHAR},
+      <if test="newrecord.cName != null" >
+        c_name = #{newrecord.cName,jdbcType=VARCHAR},
+      </if>
+      <if test="newrecord.bName != null" >
+        b_name = #{newrecord.bName,jdbcType=VARCHAR},
+      </if>
+      <if test="newrecord.uName != null" >
+        u_name = #{newrecord.uName,jdbcType=VARCHAR},
+      </if>
+      <if test="newrecord.hId != null" >
+        h_id = #{newrecord.hId,jdbcType=INTEGER},
+      </if>
+      <if test="newrecord.hName != null" >
+        h_name = #{newrecord.hName,jdbcType=VARCHAR},
+      </if>
+      </set>
+        where 1=1
+      <if test="record.cId != null" >
+        AND c_id=#{record.cId,jdbcType=VARCHAR}
       </if>
       <if test="record.bName != null" >
-        b_name = #{record.bName,jdbcType=VARCHAR},
+        AND b_name = #{record.bName,jdbcType=VARCHAR}
       </if>
       <if test="record.uName != null" >
-        u_name = #{record.uName,jdbcType=VARCHAR},
+        AND u_name = #{record.uName,jdbcType=VARCHAR}
       </if>
       <if test="record.hId != null" >
-        h_id = #{record.hId,jdbcType=INTEGER},
+        AND h_id = #{record.hId,jdbcType=INTEGER}
       </if>
       <if test="record.hName != null" >
-        h_name = #{record.hName,jdbcType=VARCHAR},
+        AND h_name = #{record.hName,jdbcType=VARCHAR}
       </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update comunity_info
-    set c_id = #{record.cId,jdbcType=VARCHAR},
-      c_name = #{record.cName,jdbcType=VARCHAR},
-      b_name = #{record.bName,jdbcType=VARCHAR},
-      u_name = #{record.uName,jdbcType=VARCHAR},
-      h_id = #{record.hId,jdbcType=INTEGER},
-      h_name = #{record.hName,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
   </update>
 </mapper>

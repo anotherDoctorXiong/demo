@@ -1,7 +1,9 @@
 package com.demo;
 
+import com.demo.model.Adminer;
 import com.demo.model.Comunity;
 import com.demo.service.rmqa;
+import com.demo.service.redis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,13 @@ public class DemoApplicationTests {
 	private RedisTemplate redisTemplate;
 	@Autowired
 	private rmqa r;
+	@Autowired
+	private redis re;
 
 	@Test
-	public void contextLoads() {
-		ValueOperations<String, String> valueOperations = redisTemplate
-				.opsForValue();
-		//valueOperations.set("1", "dasf", 80, TimeUnit.SECONDS);
-		//Comunity com1 = (Comunity) valueOperations.get("1");
-		System.out.println(valueOperations.get("1"));
+	public void redis(){
+		re.getData();
 	}
-	@Test
-	public void rmqa(){
 
-	}
 
 }

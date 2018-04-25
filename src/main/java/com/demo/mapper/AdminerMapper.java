@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface AdminerMapper {
-    int countByExample(AdminerExample example);
+    int countById(@Param("list") List<String> comunityidlist);
 
     int deleteByExample(AdminerExample example);
 
@@ -14,9 +14,18 @@ public interface AdminerMapper {
 
     int insertSelective(Adminer record);
 
-    List<Adminer> selectByExample(AdminerExample example);
+    Adminer login(Adminer record);
 
-    int updateByExampleSelective(@Param("record") Adminer record, @Param("example") AdminerExample example);
+    Adminer userexit(Adminer record);
 
-    int updateByExample(@Param("record") Adminer record, @Param("example") AdminerExample example);
+    List<Adminer> selectByExample();
+
+
+    int updateByName(@Param("record") Adminer record);
+
+    List<Adminer> selectById(@Param("list") List<String> comunityidlist);
+
+    void deleteByName(String name);
+
+    Adminer selectByName(String name);
 }

@@ -1,35 +1,40 @@
 package com.demo.service;
 
+import com.demo.model.Adminer;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+
 @Service
 @Component
-public class rmqa {
+public class  rmqa {
     @Autowired
     private AmqpTemplate rabbitTemplate;
+    @Autowired
+    private RabbitMessagingTemplate rabbitMessagingTemplate;
+    @Autowired
+    private MappingJackson2MessageConverter mappingJackson2MessageConverter;
 /*
 
     public void send() {
-        */
-/*rabbitTemplate.send(message);   //发消息，参数类型为org.springframework.amqp.core.Message
-        rabbitTemplate.convertAndSend(object); //转换并发送消息。 将参数对象转换为org.springframework.amqp.core.Message后发送
-        rabbitTemplate.convertSendAndReceive(message) //转换并发送消息,且等待消息者返回响应消息。*//*
-
-        String context = "message";
-        System.out.println("Sender : " + context);
-        for(int i=0;i<10;i++){
-            this.rabbitTemplate.convertAndSend("Exchange","key",context+i);
-        }
+        Adminer user=new Adminer();
+        user.setName("daf");
+        this.rabbitMessagingTemplate.setMessageConverter(this.mappingJackson2MessageConverter);
+        System.out.println("Sender : " + user.toString());
+        this.rabbitMessagingTemplate.convertAndSend("Exchange","key",user);
     }
+
+
     @RabbitListener(queues = "queue1")
-    public void processMessage1(String msg) {
-        System.out.println( " 接收到来自queue1队列的消息：" + msg);
+    public void process(Adminer adminer) {
+        System.out.println("Receiver  : " + adminer);
     }
 */
+
 
 }

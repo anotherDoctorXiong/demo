@@ -1,15 +1,17 @@
 package com.demo.service;
 
-import com.demo.mapper.CitiesMapper;
-import com.demo.mapper.DistsMapper;
-import com.demo.mapper.LocalMapper;
-import com.demo.mapper.ProvincesMapper;
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
+import com.demo.mapper.*;
 import com.demo.model.Cities;
 import com.demo.model.Dists;
 import com.demo.model.Local;
 import com.demo.model.Provinces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -23,6 +25,8 @@ public class localservice {
     private DistsMapper distsMapper;
     @Autowired
     private LocalMapper localMapper;
+    @Autowired
+    private ComunityMapper comunityMapper;
 
     //获取省份列表
     public List<Provinces> getprovince(){
@@ -42,8 +46,42 @@ public class localservice {
     public List<Dists> getdists(String id){
         return distsMapper.selectByExample(id);
     }*/
-    public List<Local> getcomunities(Local local){
-        return localMapper.getComunities(local);
+    public List<Local> checkcomunities(Local local){
+        return localMapper.checkComunities(local);
     }
 
+    public List<Local> getcomunities(String dist){
+        return localMapper.getComunities(dist);
+    }
+
+    public List<String> getbuilds(String cId) {
+        return comunityMapper.getbuilds(cId);
+    }
+    public List<String> getunits(String cId,String bName) {
+        return comunityMapper.getunits(cId,bName);
+    }
+    public List<String> gethost(String cId,String bName,String uName) {
+        return comunityMapper.gethost(cId,bName,uName);
+    }
+
+    public List<Local> getallcomunity() {
+        return localMapper.getAllComunity();
+    }
+    public void upload(MultipartFile file) throws Exception{
+        String fileName = file.getOriginalFilename();
+
+        String prefix=fileName.substring(fileName.lastIndexOf("."));
+
+        final File excelFile = File.createTempFile(prefix,".xls");
+        // MultipartFile to File
+        file.transferTo(excelFile);
+        ImportParams params = new ImportParams();
+        params.setTitleRows(1);
+        params.setHeadRows(1);
+        List<Local> lists= ExcelImportUtil.importExcel(excelFile,Local.class,params);
+        localMapper.importExcel(lists);
+        if (excelFile.exists()) {
+            excelFile.delete();
+        }
+    }
 }

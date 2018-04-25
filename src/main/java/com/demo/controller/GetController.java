@@ -52,12 +52,46 @@ public class GetController {
 
     @RequestMapping(value="/comunities",method = RequestMethod.GET)
     public  ResponseEntity<List<Local>> getcomunities(@RequestParam Map<String,String> map){
-        Local local=new Local();
-        local.setProvince(map.get("province"));
-        local.setCity(map.get("city"));
-        local.setDist(map.get("dist"));
+        System.out.println(map.get("dist"));
         try {
-            return new ResponseEntity<List<Local>>(ls.getcomunities(local), HttpStatus.OK);
+            return new ResponseEntity<List<Local>>(ls.getcomunities(map.get("dist")), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value="/comunity/all",method = RequestMethod.GET)
+    public  ResponseEntity<List<Local>> getcomunities(){
+        try {
+            return new ResponseEntity<List<Local>>(ls.getallcomunity(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+    @RequestMapping(value="/builds",method = RequestMethod.GET)
+    public  ResponseEntity<List<String>> getbuilds(@RequestParam Map<String,String> map){
+        try {
+            return new ResponseEntity<List<String>>(ls.getbuilds(map.get("comunity_id")), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+    @RequestMapping(value="/units",method = RequestMethod.GET)
+    public  ResponseEntity<List<String>> getunits(@RequestParam Map<String,String> map){
+        try {
+            return new ResponseEntity<List<String>>(ls.getunits(map.get("comunity_id"),map.get("build_name")), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+    @RequestMapping(value="/host",method = RequestMethod.GET)
+    public  ResponseEntity<List<String>> getbuild(@RequestParam Map<String,String> map){
+        try {
+            return new ResponseEntity<List<String>>(ls.gethost(map.get("comunity_id"),map.get("build_name"),map.get("unit_name")), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
         }

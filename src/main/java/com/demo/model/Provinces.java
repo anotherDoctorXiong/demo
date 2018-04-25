@@ -1,6 +1,6 @@
 package com.demo.model;
 
-public class  Provinces {
+public class Provinces {
     private Integer id;
 
     private String provinceid;

@@ -16,7 +16,7 @@ public interface DistsMapper {
 
     int insertSelective(Dists record);
 
-    List<Dists> selectByExample(@Param("cityid")String cityid);
+    List<Dists> selectByExample(@Param("cityid") String cityid);
 
     String selectByPrimaryKey(String id);
 

@@ -1,19 +1,28 @@
 package com.demo.model;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
 public class Local {
+
+    @Excel(name = "province", orderNum = "0")
     private String province;
-
+    @Excel(name = "city", orderNum = "1")
     private String city;
-
+    @Excel(name = "dist", orderNum = "2")
     private String dist;
-
+    @Excel(name = "c_name", orderNum = "4")
     private String cName;
-
+    @Excel(name = "c_id", orderNum = "3")
     private String cId;
-
+    @Excel(name = "c_local", orderNum = "5")
     private String cLocal;
+    public Local(String cName, String cId){
+        this.cName = cName;
+        this.cId = cId;
+    }
 
-    public Local(String province, String city, String dist, String cName, String cId, String cLocal) {
+    public Local( String province, String city, String dist, String cName, String cId, String cLocal) {
+
         this.province = province;
         this.city = city;
         this.dist = dist;
@@ -21,14 +30,12 @@ public class Local {
         this.cId = cId;
         this.cLocal = cLocal;
     }
-    public Local(String cName, String cId) {
-        this.cName = cName;
-        this.cId = cId;
-    }
 
     public Local() {
         super();
     }
+
+
 
     public String getProvince() {
         return province;

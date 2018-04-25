@@ -16,7 +16,7 @@ public interface CitiesMapper {
 
     int insertSelective(Cities record);
 
-    List<Cities> selectByExample(@Param("provinceid")String provinceid);
+    List<Cities> selectByExample(@Param("provinceid") String provinceid);
 
     String selectByPrimaryKey(String id);
 

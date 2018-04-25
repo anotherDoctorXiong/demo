@@ -1,14 +1,14 @@
 package com.demo.service;
 
+import com.github.pagehelper.PageHelper;
 import com.demo.PageBean;
 import com.demo.mapper.ComunityMapper;
 import com.demo.model.Comunity;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class page {
+public class   page {
     @Autowired
     private ComunityMapper comunityMapper;
 
